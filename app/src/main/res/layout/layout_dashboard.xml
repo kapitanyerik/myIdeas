@@ -23,4 +23,13 @@
         app:layout_constraintTop_toBottomOf="@+id/dashboard_textView"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <Button
+        android:id="@+id/dashboard_newIdea_Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="NewIdeaFragment"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dashboard_myIdeas_Button"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

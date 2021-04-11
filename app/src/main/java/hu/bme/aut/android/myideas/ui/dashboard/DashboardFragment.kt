@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import hu.bme.aut.android.myideas.NavigationHost
 import hu.bme.aut.android.myideas.R
+import hu.bme.aut.android.myideas.ui.about.AboutFragment
 import hu.bme.aut.android.myideas.ui.myIdeas.MyIdeasFragment
 import hu.bme.aut.android.myideas.ui.newIdea.NewIdeaFragment
 import hu.bme.aut.android.myideas.util.DataState
@@ -45,6 +46,10 @@ class DashboardFragment : Fragment() {
 
         view.dashboard_newIdea_Button.setOnClickListener {
             (activity as NavigationHost).navigateTo(NewIdeaFragment(), true)
+        }
+
+        view.dashboard_About_Button.setOnClickListener {
+            (activity as NavigationHost).navigateTo(AboutFragment(), true)
         }
 
         return view

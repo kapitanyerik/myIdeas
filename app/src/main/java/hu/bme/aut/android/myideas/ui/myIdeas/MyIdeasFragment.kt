@@ -1,4 +1,4 @@
-package hu.bme.aut.android.myideas.ui.dashboard
+package hu.bme.aut.android.myideas.ui.myIdeas
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,24 +7,20 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
-import hu.bme.aut.android.myideas.NavigationHost
 import hu.bme.aut.android.myideas.R
-import hu.bme.aut.android.myideas.ui.myIdeas.MyIdeasFragment
 import hu.bme.aut.android.myideas.util.DataState
-import kotlinx.android.synthetic.main.fragment_dashboard.*
-import kotlinx.android.synthetic.main.layout_dashboard.*
-import kotlinx.android.synthetic.main.layout_dashboard.view.*
+import kotlinx.android.synthetic.main.fragment_my_ideas.*
 
 @AndroidEntryPoint
-class DashboardFragment : Fragment() {
+class MyIdeasFragment : Fragment() {
 
     companion object {
         const val LOADING = 0
-        const val DASHBOARD_SCREEN = 1
+        const val MY_IDEAS_SCREEN = 1
         const val ERROR_SCREEN = 2
     }
 
-    private val viewModel: DashboardViewModel by viewModels()
+    private val viewModel: MyIdeasViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,26 +32,19 @@ class DashboardFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_dashboard, container, false)
-
-        view.dashboard_myIdeas_Button.setOnClickListener {
-            (activity as NavigationHost).navigateTo(MyIdeasFragment(), true)
-        }
-
-        return view
+        return inflater.inflate(R.layout.fragment_my_ideas, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.setStateEvent(DashboardStateEvent.LoadDashboard)
+        viewModel.setStateEvent(MyIdeasStateEvent.LoadMyIdeas)
     }
 
     private fun subscribeObservers() {
         viewModel.dataState.observe(this) { dataState ->
             when (dataState) {
-                is DataState.Success<String> -> {
-                    setViewFlipper(DASHBOARD_SCREEN)
-                    dashboard_textView.text = dataState.data
+                is DataState.Success<Unit> -> {
+                    setViewFlipper(MY_IDEAS_SCREEN)
                 }
 
                 is DataState.Error -> {
@@ -70,6 +59,6 @@ class DashboardFragment : Fragment() {
     }
 
     private fun setViewFlipper(displayedState: Int) {
-        fragment_dashboard_view_flipper.displayedChild = displayedState
+        fragment_my_ideas_view_flipper.displayedChild = displayedState
     }
 }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import dagger.hilt.android.AndroidEntryPoint
+import hu.bme.aut.android.myideas.ui.dashboard.DashboardFragment
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(), NavigationHost {
@@ -14,7 +15,7 @@ class MainActivity : AppCompatActivity(), NavigationHost {
         if (savedInstanceState == null) {
             supportFragmentManager
                 .beginTransaction()
-                .add(R.id.container, TODO("Place here the initial fragment"))
+                .add(R.id.container, DashboardFragment())
                 .commit()
         }
     }

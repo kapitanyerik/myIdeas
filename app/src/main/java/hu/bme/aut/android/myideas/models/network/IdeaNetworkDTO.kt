@@ -20,7 +20,7 @@ package hu.bme.aut.android.myideas.models.network
  * @param shortDescription
  */
 data class IdeaNetworkDTO(
-    val id: String? = null,
+    val id: String,
     val title: String? = null,
     val description: String? = null,
     val shortDescription: String? = null

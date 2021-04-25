@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "ideas")
-data class IdeaCacheEntity(
+data class IdeaCacheDTO(
     @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = "id")
     var id: String,

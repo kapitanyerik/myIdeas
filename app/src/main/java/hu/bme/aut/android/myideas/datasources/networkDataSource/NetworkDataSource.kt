@@ -1,25 +1,24 @@
 package hu.bme.aut.android.myideas.datasources.networkDataSource
 
-import hu.bme.aut.android.myideas.models.domain.Idea
-import hu.bme.aut.android.myideas.models.network.IdeaNetworkEntity
+import hu.bme.aut.android.myideas.models.network.IdeaNetworkDTO
 import retrofit2.http.*
 
 interface NetworkDataSource {
     @GET("myIdeas")
-    suspend fun getMyIdeas(): List<Idea>
+    suspend fun getMyIdeas(): List<IdeaNetworkDTO>
 
-    @POST("myIdeas")
+    @POST("myIdea")
     suspend fun createMyIdea(
-        @Body idea: Idea
+        @Body idea: IdeaNetworkDTO
     )
 
-    @PUT("myIdeas/{id}")
+    @PUT("myIdea")
     suspend fun updateMyIdea(
         @Path("id") id: String,
-        @Body idea: Idea
-    ): IdeaNetworkEntity
+        @Body idea: IdeaNetworkDTO
+    )
 
-    @DELETE("myIdeas/{id}")
+    @DELETE("myIdea/{id}")
     suspend fun deleteMyIdea(
         @Path("id") id: String
     )

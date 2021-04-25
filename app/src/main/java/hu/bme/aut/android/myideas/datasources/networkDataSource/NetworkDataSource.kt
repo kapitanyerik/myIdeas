@@ -14,7 +14,6 @@ interface NetworkDataSource {
 
     @PUT("myIdea")
     suspend fun updateMyIdea(
-        @Path("id") id: String,
         @Body idea: IdeaNetworkDTO
     )
 

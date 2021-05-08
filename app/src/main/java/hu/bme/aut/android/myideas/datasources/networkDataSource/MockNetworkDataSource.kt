@@ -4,7 +4,14 @@ import hu.bme.aut.android.myideas.models.network.IdeaNetworkDTO
 
 class MockNetworkDataSource : NetworkDataSource {
     override suspend fun getMyIdeas(): List<IdeaNetworkDTO> {
-        TODO("Not yet implemented")
+        return listOf(
+            IdeaNetworkDTO(
+                id = "12345",
+                title = "",
+                shortDescription = "",
+                description = ""
+            )
+        )
     }
 
     override suspend fun createMyIdea(idea: IdeaNetworkDTO) {

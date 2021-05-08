@@ -5,11 +5,17 @@ import hu.bme.aut.android.myideas.models.domain.Idea
 import hu.bme.aut.android.myideas.models.network.IdeaNetworkDTO
 
 fun Idea.toNetworkDTO() = IdeaNetworkDTO(
-    id, title, description, shortDescription
+    id = id,
+    title = title,
+    shortDescription = shortDescription,
+    description = description
 )
 
 fun Idea.toCacheDTO() = IdeaCacheDTO(
-    id, title, description, shortDescription
+    id = id,
+    title = title,
+    shortDescription = shortDescription,
+    description = description
 )
 
 fun IdeaNetworkDTO.toIdeaDomainModel() = Idea(
@@ -20,7 +26,10 @@ fun IdeaNetworkDTO.toIdeaDomainModel() = Idea(
 )
 
 fun IdeaCacheDTO.toIdeaDomainModel() = Idea(
-    id, title, description, shortDescription
+    id = id,
+    title = title,
+    shortDescription = shortDescription,
+    description = description
 )
 
 fun List<IdeaNetworkDTO>.toListOfIdeaDomainModel() = this.map { it.toIdeaDomainModel() }

@@ -7,9 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
+import hu.bme.aut.android.myideas.NavigationHost
 import hu.bme.aut.android.myideas.R
 import hu.bme.aut.android.myideas.util.DataState
 import kotlinx.android.synthetic.main.fragment_about.*
+import kotlinx.android.synthetic.main.layout_about.*
 
 @AndroidEntryPoint
 class AboutFragment : Fragment() {
@@ -27,19 +29,6 @@ class AboutFragment : Fragment() {
         subscribeObservers()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_about, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        viewModel.setStateEvent(AboutStateEvent.LoadAbout)
-    }
-
     private fun subscribeObservers() {
         viewModel.dataState.observe(this) { dataState ->
             when (dataState) {
@@ -55,6 +44,26 @@ class AboutFragment : Fragment() {
                     setViewFlipper(LOADING)
                 }
             }
+        }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_about, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel.setStateEvent(AboutStateEvent.LoadAbout)
+        setupToolbar()
+    }
+
+    private fun setupToolbar() {
+        aboutToolbar.setNavigationOnClickListener {
+            (activity as NavigationHost).navigateBack()
         }
     }
 

@@ -14,6 +14,9 @@ interface IdeaDao {
     @Query("SELECT * FROM ideas WHERE id=:id")
     suspend fun getIdea(id: String): IdeaCacheDTO?
 
+    @Query("SELECT * FROM ideas LIMIT 1")
+    suspend fun getMyLastIdea(): IdeaCacheDTO?
+
     @Delete
     suspend fun delete(idea: IdeaCacheDTO)
 }

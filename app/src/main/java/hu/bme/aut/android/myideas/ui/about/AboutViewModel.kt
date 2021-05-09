@@ -22,7 +22,7 @@ constructor() : ViewModel() {
         viewModelScope.launch {
             when (aboutStateEvent) {
                 is AboutStateEvent.LoadAbout -> {
-                    _dataState.value = DataState.Success(data = Unit)
+                    _dataState.value = DataState.Success(Unit)
                 }
             }
         }

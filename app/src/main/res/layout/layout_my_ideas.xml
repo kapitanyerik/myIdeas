@@ -11,11 +11,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:navigationIcon="@drawable/ic_arrow_back"
-        android:background="@color/gray" />
+        android:background="@color/bage" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/myIdeasList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/item_idea_card" />
 </LinearLayout>

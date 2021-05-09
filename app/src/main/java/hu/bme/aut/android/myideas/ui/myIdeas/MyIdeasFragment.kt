@@ -5,12 +5,16 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import hu.bme.aut.android.myideas.NavigationHost
 import hu.bme.aut.android.myideas.R
 import hu.bme.aut.android.myideas.models.domain.Idea
+import hu.bme.aut.android.myideas.ui.myIdeas.MyIdeasStateEvent.DeleteIdea
+import hu.bme.aut.android.myideas.ui.myIdeas.MyIdeasStateEvent.LoadMyIdeas
+import hu.bme.aut.android.myideas.ui.newIdea.NewIdeaFragment
 import hu.bme.aut.android.myideas.util.DataState
 import kotlinx.android.synthetic.main.fragment_my_ideas.*
 import kotlinx.android.synthetic.main.layout_my_ideas.*
@@ -35,9 +39,9 @@ class MyIdeasFragment : Fragment(), MyIdeasListAdapter.ItemClickedListener {
     private fun subscribeObservers() {
         viewModel.dataState.observe(this) { dataState ->
             when (dataState) {
-                is DataState.Success<Idea> -> {
+                is DataState.Success<List<Idea>> -> {
                     setViewFlipper(MY_IDEAS_SCREEN)
-                    myIdeasListAdapter.submitList(listOf(dataState.data))
+                    myIdeasListAdapter.submitList(dataState.data)
                 }
 
                 is DataState.Error -> {
@@ -64,10 +68,9 @@ class MyIdeasFragment : Fragment(), MyIdeasListAdapter.ItemClickedListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        viewModel.setStateEvent(MyIdeasStateEvent.LoadMyIdeas)
         setupToolbar()
         setupList()
+        viewModel.setStateEvent(LoadMyIdeas)
     }
 
     private fun setupToolbar() {
@@ -83,16 +86,20 @@ class MyIdeasFragment : Fragment(), MyIdeasListAdapter.ItemClickedListener {
     }
 
     override fun onListItemClicked(item: Idea) {
-        TODO()
+        Toast.makeText(context, "List item clicked", Toast.LENGTH_SHORT).show()
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
         when (item.title) {
             "Szerkesztés" -> {
-                TODO()
+                (activity as NavigationHost).navigateTo(
+                    NewIdeaFragment.newInstance(
+                        myIdeasListAdapter.getItemAt(item.groupId)
+                    ), true
+                )
             }
             "Törlés" -> {
-                TODO()
+                viewModel.setStateEvent(DeleteIdea(myIdeasListAdapter.getItemAt(item.groupId)))
             }
         }
         return super.onContextItemSelected(item)

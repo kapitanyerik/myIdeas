@@ -41,16 +41,16 @@ class DashboardFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_dashboard, container, false)
 
-        view.dashboard_myIdeas_Button.setOnClickListener {
+        view.dashboardInfoIcon.setOnClickListener {
+            (activity as NavigationHost).navigateTo(AboutFragment(), true)
+        }
+
+        view.dashboardMyIdeasButton.setOnClickListener {
             (activity as NavigationHost).navigateTo(MyIdeasFragment(), true)
         }
 
-        view.dashboard_newIdea_Button.setOnClickListener {
+        view.dashboardNewIdeaButton.setOnClickListener {
             (activity as NavigationHost).navigateTo(NewIdeaFragment(), true)
-        }
-
-        view.dashboard_About_Button.setOnClickListener {
-            (activity as NavigationHost).navigateTo(AboutFragment(), true)
         }
 
         return view
@@ -66,11 +66,12 @@ class DashboardFragment : Fragment() {
             when (dataState) {
                 is DataState.Success<Idea> -> {
                     setViewFlipper(DASHBOARD_SCREEN)
-                    dashboard_textView.text = "Hello World"
+                    dashboardIdeaTitle.text = dataState.data.title
+                    dashboardIdeaShortDescription.text = dataState.data.shortDescription
                 }
 
                 is DataState.Error -> {
-                    setViewFlipper(ERROR_SCREEN)
+                    setViewFlipper(DASHBOARD_SCREEN)
                 }
 
                 is DataState.Loading -> {

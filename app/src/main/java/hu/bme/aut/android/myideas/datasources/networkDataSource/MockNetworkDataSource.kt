@@ -6,9 +6,9 @@ class MockNetworkDataSource : NetworkDataSource {
     override suspend fun getMyIdeas(): List<IdeaNetworkDTO> {
         return listOf(
             IdeaNetworkDTO(
-                id = "11115",
-                title = "first great idea",
-                shortDescription = "this is the short description of the first idea",
+                id = "11117",
+                title = "third great idea",
+                shortDescription = "this is the short description of the third idea",
                 description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do " +
                         "eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad " +
                         "minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip " +
@@ -30,9 +30,9 @@ class MockNetworkDataSource : NetworkDataSource {
                         "mollit anim id est laborum."
             ),
             IdeaNetworkDTO(
-                id = "11117",
-                title = "third great idea",
-                shortDescription = "this is the short description of the third idea",
+                id = "11115",
+                title = "first great idea",
+                shortDescription = "this is the short description of the first idea",
                 description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do " +
                         "eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad " +
                         "minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip " +

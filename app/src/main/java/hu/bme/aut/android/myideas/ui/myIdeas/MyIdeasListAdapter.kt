@@ -29,6 +29,8 @@ class MyIdeasListAdapter : ListAdapter<Idea, IdeaCardViewHolder>(IdeaComparator)
         holder.itemView.ideaShortDescription.text = idea.shortDescription
     }
 
+    fun getItemAt(position: Int): Idea = getItem(position)
+
     inner class IdeaCardViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
         View.OnCreateContextMenuListener {
 

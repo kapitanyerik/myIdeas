@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.first
 
 class IdeaRepositoryTest : BehaviorSpec({
     val mockNetworkDataSource: NetworkDataSource = mockk()
+    //val mockNetworkDataSource: MockNetworkDataSource = mockk()
     val mockCacheDataSource: IdeaDao = mockk()
 
     val ideaRepository = IdeaRepository(

@@ -18,9 +18,9 @@ class DashboardViewModel
 constructor(
     private val ideaRepository: IdeaRepository
 ) : ViewModel() {
-    private val _dataState: MutableLiveData<DataState<String>> = MutableLiveData()
+    private val _dataState: MutableLiveData<DataState<Unit>> = MutableLiveData()
 
-    val dataState: LiveData<DataState<String>>
+    val dataState: LiveData<DataState<Unit>>
         get() = _dataState
 
     fun setStateEvent(dashboardStateEvent: DashboardStateEvent) {

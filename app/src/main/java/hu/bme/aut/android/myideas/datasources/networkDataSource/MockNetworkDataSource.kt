@@ -6,7 +6,19 @@ class MockNetworkDataSource : NetworkDataSource {
     override suspend fun getMyIdeas(): List<IdeaNetworkDTO> {
         return listOf(
             IdeaNetworkDTO(
-                id = "12345",
+                id = "11115",
+                title = "",
+                shortDescription = "",
+                description = ""
+            ),
+            IdeaNetworkDTO(
+                id = "11116",
+                title = "",
+                shortDescription = "",
+                description = ""
+            ),
+            IdeaNetworkDTO(
+                id = "11117",
                 title = "",
                 shortDescription = "",
                 description = ""

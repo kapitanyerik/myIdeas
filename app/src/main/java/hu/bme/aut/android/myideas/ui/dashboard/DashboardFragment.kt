@@ -63,9 +63,9 @@ class DashboardFragment : Fragment() {
     private fun subscribeObservers() {
         viewModel.dataState.observe(this) { dataState ->
             when (dataState) {
-                is DataState.Success<String> -> {
+                is DataState.Success<Unit> -> {
                     setViewFlipper(DASHBOARD_SCREEN)
-                    dashboard_textView.text = dataState.data
+                    dashboard_textView.text = "Hello World"
                 }
 
                 is DataState.Error -> {

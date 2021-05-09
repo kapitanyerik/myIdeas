@@ -28,6 +28,8 @@ class IdeaRepositoryTest : BehaviorSpec({
         cacheDataSource = mockCacheDataSource
     )
 
+    // Mocking the Idea this way is necessary, because the mockk tool could not use the custom
+    // extension functions on a mockk object.
     val mockedIdea = Idea(
         id = "12345",
         title = "",
@@ -35,7 +37,21 @@ class IdeaRepositoryTest : BehaviorSpec({
         description = ""
     )
 
-    given("There is a successful network call during idea creation") {
+    given("asd") {
+
+        When("IdeaRepository's loadDashboard() method is called") {
+            val returnValue = ideaRepository.loadDashboard()
+
+            Then("The return value's firts value should be DataState.Loading") {
+                returnValue.first().shouldBeTypeOf<DataState.Loading>()
+            }
+            and("Return value's second value should be DataState.Success") {
+                returnValue.drop(1).first() shouldBe DataState.Success(Unit)
+            }
+        }
+    }
+
+    given("There is a successful network and Room call during idea creation") {
         coEvery { mockNetworkDataSource.createMyIdea(mockedIdea.toNetworkDTO()) } just Runs
 
         coEvery { mockCacheDataSource.insert(mockedIdea.toCacheDTO()) } returns 1
@@ -43,16 +59,19 @@ class IdeaRepositoryTest : BehaviorSpec({
         When("IdeaRepository's createIdea(Idea) method is called.") {
             val returnValue = ideaRepository.createIdea(mockedIdea)
 
-            Then("The return value's first element should be DataState.Loading") {
+            Then("Return value's first element should be DataState.Loading") {
                 returnValue.first().shouldBeTypeOf<DataState.Loading>()
             }
-            and("The return value's second element should be DataState.Success") {
+            and("Return value's second element should be DataState.Success") {
                 returnValue.drop(1).first().shouldBe(DataState.Success(data = Unit))
             }
         }
     }
 
-    given("There is a list of Ideas returning from network") {
+    given(
+        "There is a list of Ideas returning from network by getMyIdeas() call and" +
+                "there is a successful Room insertion"
+    ) {
         coEvery { mockNetworkDataSource.getMyIdeas() } returns listOf(
             IdeaNetworkDTO(
                 id = "12345",
@@ -73,13 +92,19 @@ class IdeaRepositoryTest : BehaviorSpec({
         When("IdeaRepository's getMyIdeas() method is called.") {
             val returnValue = ideaRepository.getMyIdeas()
 
-            Then("The return value's first element should be DataState.Loading") {
+            Then("Return value's first element should be DataState.Loading") {
                 returnValue.first().shouldBeTypeOf<DataState.Loading>()
             }
-            and("The return value's second value should be DataState.Success with an Idea in it.") {
+            and(
+                "Return value's second value should be DataState.Success" +
+                        "with an Idea in it."
+            ) {
                 returnValue.drop(1).first().shouldBeTypeOf<DataState.Success<Idea>>()
             }
-            and("The return value's third value should be DataState.Success with an Idea in it.") {
+            and(
+                "Return value's third value should be DataState.Success" +
+                        "with an Idea in it."
+            ) {
                 returnValue.drop(2).first().shouldBe(
                     DataState.Success(
                         data = Idea(
@@ -90,6 +115,40 @@ class IdeaRepositoryTest : BehaviorSpec({
                         )
                     )
                 )
+            }
+        }
+    }
+
+    given("There is a successful network and Room call during idea modification.") {
+        coEvery { mockNetworkDataSource.updateMyIdea(mockedIdea.toNetworkDTO()) } just Runs
+
+        coEvery { mockCacheDataSource.insert(mockedIdea.toCacheDTO()) } returns 1
+
+        When("IdeaRepository's updateIdea(Idea) method is called") {
+            val returnValue = ideaRepository.updateIdea(mockedIdea)
+
+            Then("Return value's first value should be DataState.Loading") {
+                returnValue.first().shouldBeTypeOf<DataState.Loading>()
+            }
+            and("Return value's second value should be DataState.Success") {
+                returnValue.drop(1).first() shouldBe DataState.Success(Unit)
+            }
+        }
+    }
+
+    given("There is a successful network and Room call during idea deletion.") {
+        coEvery { mockNetworkDataSource.deleteMyIdea(mockedIdea.id) } just Runs
+
+        coEvery { mockCacheDataSource.delete(mockedIdea.toCacheDTO()) } just Runs
+
+        When("IdeaRepository's deleteIdea(Idea) method is called") {
+            val returnValue = ideaRepository.deleteIdea(mockedIdea)
+
+            Then("Return value's first value should be DataState.Loading") {
+                returnValue.first().shouldBeTypeOf<DataState.Loading>()
+            }
+            and("Return value's second value should be DataState.Success") {
+                returnValue.drop(1).first() shouldBe DataState.Success(Unit)
             }
         }
     }

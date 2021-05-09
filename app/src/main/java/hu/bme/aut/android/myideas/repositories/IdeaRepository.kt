@@ -13,6 +13,9 @@ import kotlinx.coroutines.flow.flow
 class IdeaRepository
 constructor(
 
+    // -- When I made the video of the application I commented out some parts of the code.
+    // -- These parts were mostly network calls.
+
     // -- This property is used for mocking the network layer.
     // -- When I made the video about the application I used that one.
     //private val networkDataSource: MockNetworkDataSource = MockNetworkDataSource(),
@@ -25,9 +28,9 @@ constructor(
     suspend fun loadDashboard(): Flow<DataState<Idea>> =
         flow {
             emit(DataState.Loading)
-            //val idea = networkDataSource.getMyLastIdea().toIdeaDomainModel()
-            //cacheDataSource.insert(idea.toCacheDTO())
-            val idea = cacheDataSource.getMyLastIdea()?.toIdeaDomainModel()
+            val idea = networkDataSource.getMyLastIdea().toIdeaDomainModel()
+            cacheDataSource.insert(idea.toCacheDTO())
+            //val idea = cacheDataSource.getMyLastIdea()?.toIdeaDomainModel()
             idea?.let {
                 emit(DataState.Success(it))
             } ?: emit(DataState.Error("There is no last idea in the cache"))

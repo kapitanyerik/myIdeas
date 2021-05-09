@@ -4,9 +4,12 @@ import hu.bme.aut.android.myideas.datasources.cacheDataSource.daos.IdeaDao
 import hu.bme.aut.android.myideas.datasources.networkDataSource.NetworkDataSource
 import hu.bme.aut.android.myideas.models.domain.Idea
 import hu.bme.aut.android.myideas.models.mappers.toCacheDTO
+import hu.bme.aut.android.myideas.models.mappers.toCacheDTOWithoutGivingId
+import hu.bme.aut.android.myideas.models.mappers.toListOfIdeaDomainModelFromCache
 import hu.bme.aut.android.myideas.models.mappers.toNetworkDTO
 import hu.bme.aut.android.myideas.models.network.IdeaNetworkDTO
 import hu.bme.aut.android.myideas.repositories.IdeaRepository
+import hu.bme.aut.android.myideas.ui.newIdea.dataState.NewIdeaDataState
 import hu.bme.aut.android.myideas.util.DataState
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.BehaviorSpec
@@ -78,11 +81,12 @@ class IdeaRepositoryTest : BehaviorSpec({
         When("IdeaRepository's createIdea(Idea) method is called.") {
             val returnValue = ideaRepository.createIdea(mockedIdea)
 
-            Then("Return value's first element should be DataState.Loading") {
-                returnValue.first().shouldBeTypeOf<DataState.Loading>()
+            Then("Return value's first element should be NewIdeaDataState.Loading") {
+                returnValue.first().shouldBeTypeOf<NewIdeaDataState.Loading>()
             }
-            and("Return value's second element should be DataState.Success") {
-                returnValue.drop(1).first().shouldBe(DataState.Success(data = Unit))
+            and("Return value's second element should be NewIdeaDataState.Success") {
+                returnValue.drop(1).first()
+                    .shouldBe(NewIdeaDataState.SuccessfulCreation(data = Unit))
             }
         }
     }
@@ -116,21 +120,23 @@ class IdeaRepositoryTest : BehaviorSpec({
             }
             and(
                 "Return value's second value should be DataState.Success" +
-                        "with an Idea in it."
+                        "with a list of Idea in it."
             ) {
-                returnValue.drop(1).first().shouldBeTypeOf<DataState.Success<Idea>>()
-            }
-            and(
-                "Return value's third value should be DataState.Success" +
-                        "with an Idea in it."
-            ) {
-                returnValue.drop(2).first().shouldBe(
+                returnValue.drop(1).first().shouldBe(
                     DataState.Success(
-                        data = Idea(
-                            id = "12346",
-                            title = "",
-                            shortDescription = "",
-                            description = ""
+                        data = listOf(
+                            Idea(
+                                id = "12345",
+                                title = "",
+                                shortDescription = "",
+                                description = ""
+                            ),
+                            Idea(
+                                id = "12346",
+                                title = "",
+                                shortDescription = "",
+                                description = ""
+                            )
                         )
                     )
                 )
@@ -146,11 +152,11 @@ class IdeaRepositoryTest : BehaviorSpec({
         When("IdeaRepository's updateIdea(Idea) method is called") {
             val returnValue = ideaRepository.updateIdea(mockedIdea)
 
-            Then("Return value's first value should be DataState.Loading") {
-                returnValue.first().shouldBeTypeOf<DataState.Loading>()
+            Then("Return value's first value should be NewIdeaDataState.Loading") {
+                returnValue.first().shouldBeTypeOf<NewIdeaDataState.Loading>()
             }
-            and("Return value's second value should be DataState.Success") {
-                returnValue.drop(1).first() shouldBe DataState.Success(Unit)
+            and("Return value's second value should be NewIdeaDataState.Success") {
+                returnValue.drop(1).first() shouldBe NewIdeaDataState.Success(Unit)
             }
         }
     }
@@ -158,7 +164,24 @@ class IdeaRepositoryTest : BehaviorSpec({
     given("There is a successful network and Room call during idea deletion.") {
         coEvery { mockNetworkDataSource.deleteMyIdea(mockedIdea.id) } just Runs
 
-        coEvery { mockCacheDataSource.delete(mockedIdea.toCacheDTO()) } just Runs
+        coEvery { mockCacheDataSource.delete(mockedIdea.toCacheDTOWithoutGivingId()) } just Runs
+
+        coEvery {
+            mockCacheDataSource.getAllIdeas().toListOfIdeaDomainModelFromCache()
+        } returns listOf(
+            Idea(
+                id = "12345",
+                title = "",
+                shortDescription = "",
+                description = ""
+            ),
+            Idea(
+                id = "12346",
+                title = "",
+                shortDescription = "",
+                description = ""
+            )
+        )
 
         When("IdeaRepository's deleteIdea(Idea) method is called") {
             val returnValue = ideaRepository.deleteIdea(mockedIdea)
@@ -167,7 +190,23 @@ class IdeaRepositoryTest : BehaviorSpec({
                 returnValue.first().shouldBeTypeOf<DataState.Loading>()
             }
             and("Return value's second value should be DataState.Success") {
-                returnValue.drop(1).first() shouldBe DataState.Success(Unit)
+                returnValue.drop(1).first() shouldBe DataState.Success(
+                    data =
+                    listOf(
+                        Idea(
+                            id = "12345",
+                            title = "",
+                            shortDescription = "",
+                            description = ""
+                        ),
+                        Idea(
+                            id = "12346",
+                            title = "",
+                            shortDescription = "",
+                            description = ""
+                        )
+                    )
+                )
             }
         }
     }

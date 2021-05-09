@@ -7,6 +7,9 @@ interface NetworkDataSource {
     @GET("myIdeas")
     suspend fun getMyIdeas(): List<IdeaNetworkDTO>
 
+    @GET("myIdea")
+    suspend fun getMyLastIdea(): IdeaNetworkDTO
+
     @POST("myIdea")
     suspend fun createMyIdea(
         @Body idea: IdeaNetworkDTO

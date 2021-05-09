@@ -37,16 +37,34 @@ class IdeaRepositoryTest : BehaviorSpec({
         description = ""
     )
 
-    given("asd") {
+    given(
+        "Network sends an Idea when we call it and the Room insertion is successful."
+    ) {
+        coEvery { mockNetworkDataSource.getMyLastIdea() } returns
+                IdeaNetworkDTO(
+                    id = "12345",
+                    title = "",
+                    shortDescription = "",
+                    description = ""
+                )
+
+        coEvery { mockCacheDataSource.insert(any()) } returns 1
 
         When("IdeaRepository's loadDashboard() method is called") {
             val returnValue = ideaRepository.loadDashboard()
 
-            Then("The return value's firts value should be DataState.Loading") {
+            Then("Return value's firts value should be DataState.Loading") {
                 returnValue.first().shouldBeTypeOf<DataState.Loading>()
             }
             and("Return value's second value should be DataState.Success") {
-                returnValue.drop(1).first() shouldBe DataState.Success(Unit)
+                returnValue.drop(1).first() shouldBe DataState.Success(
+                    Idea(
+                        id = "12345",
+                        title = "",
+                        shortDescription = "",
+                        description = ""
+                    )
+                )
             }
         }
     }

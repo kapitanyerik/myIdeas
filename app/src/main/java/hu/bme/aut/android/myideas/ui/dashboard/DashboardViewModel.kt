@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import hu.bme.aut.android.myideas.models.domain.Idea
 import hu.bme.aut.android.myideas.repositories.IdeaRepository
 import hu.bme.aut.android.myideas.util.DataState
 import kotlinx.coroutines.flow.launchIn
@@ -18,9 +19,9 @@ class DashboardViewModel
 constructor(
     private val ideaRepository: IdeaRepository
 ) : ViewModel() {
-    private val _dataState: MutableLiveData<DataState<Unit>> = MutableLiveData()
+    private val _dataState: MutableLiveData<DataState<Idea>> = MutableLiveData()
 
-    val dataState: LiveData<DataState<Unit>>
+    val dataState: LiveData<DataState<Idea>>
         get() = _dataState
 
     fun setStateEvent(dashboardStateEvent: DashboardStateEvent) {

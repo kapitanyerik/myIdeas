@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import hu.bme.aut.android.myideas.NavigationHost
 import hu.bme.aut.android.myideas.R
+import hu.bme.aut.android.myideas.models.domain.Idea
 import hu.bme.aut.android.myideas.ui.about.AboutFragment
 import hu.bme.aut.android.myideas.ui.myIdeas.MyIdeasFragment
 import hu.bme.aut.android.myideas.ui.newIdea.NewIdeaFragment
@@ -63,7 +64,7 @@ class DashboardFragment : Fragment() {
     private fun subscribeObservers() {
         viewModel.dataState.observe(this) { dataState ->
             when (dataState) {
-                is DataState.Success<Unit> -> {
+                is DataState.Success<Idea> -> {
                     setViewFlipper(DASHBOARD_SCREEN)
                     dashboard_textView.text = "Hello World"
                 }

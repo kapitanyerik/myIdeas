@@ -4,6 +4,7 @@ import hu.bme.aut.android.myideas.datasources.cacheDataSource.daos.IdeaDao
 import hu.bme.aut.android.myideas.datasources.networkDataSource.NetworkDataSource
 import hu.bme.aut.android.myideas.models.domain.Idea
 import hu.bme.aut.android.myideas.models.mappers.toCacheDTO
+import hu.bme.aut.android.myideas.models.mappers.toIdeaDomainModel
 import hu.bme.aut.android.myideas.models.mappers.toListOfIdeaDomainModel
 import hu.bme.aut.android.myideas.models.mappers.toNetworkDTO
 import hu.bme.aut.android.myideas.util.DataState
@@ -16,11 +17,20 @@ constructor(
     private val networkDataSource: NetworkDataSource,
     private val cacheDataSource: IdeaDao
 ) {
-    suspend fun loadDashboard(): Flow<DataState<Unit>> =
+    suspend fun loadDashboard(): Flow<DataState<Idea>> =
         flow {
             emit(DataState.Loading)
-            emit(DataState.Success(Unit))
+            val idea = networkDataSource.getMyLastIdea().toIdeaDomainModel()
+            cacheDataSource.insert(idea.toCacheDTO())
+            emit(DataState.Success(idea))
         }
+            .catch { throwable ->
+                emit(
+                    DataState.Error(
+                        throwable.message ?: "Error during getting my last idea process"
+                    )
+                )
+            }
 
     suspend fun createIdea(idea: Idea): Flow<DataState<Unit>> =
         flow {
